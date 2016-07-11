@@ -24,6 +24,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -126,8 +127,9 @@ public final class AlertsFragment extends Fragment {
                 return;
             }
 
-            // Unfortunately AeroGear does not support single item fetching.
-            Persona persona = personas.get(0);
+            Toast.makeText(getSupportFragment().getActivity(), personas.size() + "items received", Toast
+                    .LENGTH_SHORT)
+                    .show();
 
         }
 
