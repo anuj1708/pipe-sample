@@ -22,11 +22,11 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
 
-public final class Persona implements Parcelable {
+public final class Item implements Parcelable {
     @SerializedName("id")
     private String id;
 
-    public Persona(@NonNull String id) {
+    public Item(@NonNull String id) {
         this.id = id;
     }
 
@@ -34,19 +34,19 @@ public final class Persona implements Parcelable {
         return id;
     }
 
-    public static Creator<Persona> CREATOR = new Creator<Persona>() {
+    public static Creator<Item> CREATOR = new Creator<Item>() {
         @Override
-        public Persona createFromParcel(Parcel parcel) {
-            return new Persona(parcel);
+        public Item createFromParcel(Parcel parcel) {
+            return new Item(parcel);
         }
 
         @Override
-        public Persona[] newArray(int size) {
-            return new Persona[size];
+        public Item[] newArray(int size) {
+            return new Item[size];
         }
     };
 
-    private Persona(Parcel parcel) {
+    private Item(Parcel parcel) {
         this.id = parcel.readString();
     }
 

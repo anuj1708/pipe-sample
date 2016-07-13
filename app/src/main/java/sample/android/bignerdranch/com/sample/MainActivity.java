@@ -1,12 +1,9 @@
 package sample.android.bignerdranch.com.sample;
 
-import java.util.List;
-
-import org.jboss.aerogear.android.pipe.callback.AbstractSupportFragmentCallback;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.view.Menu;
 
 public class MainActivity extends FragmentActivity {
@@ -21,12 +18,12 @@ public class MainActivity extends FragmentActivity {
 
     }
 
-    private Fragment getAlertsFragment() {
-        return Fragments.Builder.buildAlertsFragment();
-    }
-
     private void setUpAlerts() {
-        Fragments.Operator.of(this).set(R.id.layout_container, getAlertsFragment());
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager
+                .beginTransaction()
+                .add(R.id.layout_container, new SimpleSupportFragment())
+                .commit();
     }
 
     @Override
@@ -34,17 +31,6 @@ public class MainActivity extends FragmentActivity {
         return true;
     }
 
-    private static final class MetricDataCallback extends AbstractSupportFragmentCallback<List<Integer>> {
-        @Override
-        public void onSuccess(List<Integer> metricBuckets) {
-
-        }
-
-        @Override
-        public void onFailure(Exception e) {
-        }
-
-    }
 
 
 }

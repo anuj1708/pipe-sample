@@ -12,7 +12,6 @@ import org.jboss.aerogear.android.core.ReadFilter;
 import org.jboss.aerogear.android.pipe.LoaderPipe;
 import org.jboss.aerogear.android.pipe.PipeConfiguration;
 import org.jboss.aerogear.android.pipe.PipeManager;
-import org.jboss.aerogear.android.pipe.callback.AbstractFragmentCallback;
 import org.jboss.aerogear.android.pipe.callback.AbstractSupportFragmentCallback;
 import org.jboss.aerogear.android.pipe.rest.RestfulPipeConfiguration;
 
@@ -24,21 +23,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * Alerts fragment.
- * <p/>
- * Displays alerts as a list with menus allowing some alert-related actions, such as acknowledgement and resolving.
- */
-public final class AlertsFragment extends Fragment {
+
+public final class SimpleSupportFragment extends Fragment {
 
 
     URL mURL;
+
     @BindView(R.id.button_QR)
     Button mButton;
+
+    @BindView(R.id.edit_url)
+    EditText mEditText;
 
     @Nullable
     @Override
@@ -49,24 +49,22 @@ public final class AlertsFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle state) {
         super.onActivityCreated(state);
-        try {
-            mURL =new URL("http://jsonplaceholder.typicode.com/posts");
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-
-
 
         setUpBindings();
 
-        setUpMenu();
+        mEditText.setText("http://jsonplaceholder.typicode.com/posts");
 
-        configurePipe("hello", mURL, Persona.class);
 
         mButton.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 try {
-                    readPipe("hello", new URI(""), new PersonasCallback());
+                    mURL =new URL(mEditText.getText().toString());
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                }
+                configurePipe("hello", mURL, Item.class);
+                try {
+                    readPipe("hello", new URI(""), new ItemsCallback());
                 } catch (URISyntaxException e) {
                     e.printStackTrace();
                 }
@@ -82,10 +80,6 @@ public final class AlertsFragment extends Fragment {
         ButterKnife.bind(this, getView());
     }
 
-
-    private void setUpMenu() {
-        setHasOptionsMenu(true);
-    }
 
 
     @SuppressWarnings("unchecked")
@@ -119,15 +113,15 @@ public final class AlertsFragment extends Fragment {
     }
 
 
-    private static final class PersonasCallback extends AbstractSupportFragmentCallback<List<Persona>> {
+    private static final class ItemsCallback extends AbstractSupportFragmentCallback<List<Item>> {
         @Override
-        public void onSuccess(List<Persona> personas) {
-            if (personas.isEmpty()) {
-                onFailure(new RuntimeException("Personas list is empty, this should not happen."));
+        public void onSuccess(List<Item> items) {
+            if (items.isEmpty()) {
+                onFailure(new RuntimeException("list is empty, this should not happen."));
                 return;
             }
 
-            Toast.makeText(getSupportFragment().getActivity(), personas.size() + "items received", Toast
+            Toast.makeText(getSupportFragment().getActivity(), items.size() + " items received", Toast
                     .LENGTH_SHORT)
                     .show();
 
